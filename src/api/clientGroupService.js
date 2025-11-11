@@ -44,6 +44,15 @@ const clientGroupService={
             console.error('Error deleting client group:', error);
             throw error;
         }
+    },
+    getAllClientGroupsForDropdown: async()=>{
+        try {
+            const response = await axios.get(`${VITE_BASE_URL}/ClientGroup/getallclientgrouptree`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching client groups for dropdown:', error);
+            throw error;
+        }   
     }
 };
 export default clientGroupService;
