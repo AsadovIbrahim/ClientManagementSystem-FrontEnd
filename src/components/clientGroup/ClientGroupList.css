@@ -1,0 +1,119 @@
+.client-group-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #f6f7fb;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #334155;
+}
+
+.table-container {
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    overflow-x: auto;
+}
+
+.groups-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.groups-table th {
+    background: #3498db;
+    font-weight: 600;
+    padding: 12px;
+    font-size: 14px;
+    text-align: left;
+    color: #fff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.groups-table td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+.groups-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.btn-edit,
+.btn-delete {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s ease;
+}
+
+.btn-edit:hover {
+    color: #2563eb;
+    transform: scale(1.1);
+}
+
+.btn-delete:hover {
+    color: #dc2626;
+    transform: scale(1.1);
+}

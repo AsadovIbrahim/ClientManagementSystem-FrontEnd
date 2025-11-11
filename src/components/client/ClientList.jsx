@@ -32,21 +32,21 @@ const ClientList = () => {
     };
 
     const handleSearch = async (e) => {
-    if (e) e.preventDefault();
-    setLoading(true);
-    try {
-        const response = await clientService.getAllClients(searchName);
-        if (response.success) {
-            setClients(response.data);
-        } else {
-            console.error('Error loading clients:', response.message);
+        if (e) e.preventDefault();
+        setLoading(true);
+        try {
+            const response = await clientService.getAllClients(searchName);
+            if (response.success) {
+                setClients(response.data);
+            } else {
+                console.error('Error loading clients:', response.message);
+            }
+        } catch (error) {
+            console.error('Error loading clients:', error);
+        } finally {
+            setLoading(false);
         }
-    } catch (error) {
-        console.error('Error loading clients:', error);
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
 
     const handleKeyPress = (e) => {
@@ -118,10 +118,8 @@ const ClientList = () => {
             let response;
             
             if (editingClient) {
-                // Redaktə et - updateClient istifadə et
                 response = await clientService.updateClient(editingClient.id, clientData);
             } else {
-                // Yeni yarat - createClient istifadə et
                 response = await clientService.createClient(clientData);
             }
             

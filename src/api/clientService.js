@@ -7,7 +7,7 @@ const clientService={
     getAllClients: async (name = '') => {
     try {
         const response = await axios.get(`${VITE_BASE_URL}/Client/getallclients`, {
-            params: { name } // query parametri
+            params: { name }
         });
         return response.data;
     } catch (error) {
@@ -26,18 +26,18 @@ const clientService={
         }
     },
     updateClient: async (clientId, clientData) => {
-    try {
-        const payload = {
-            id: clientId,
-            ...clientData
-        };
-        const response = await axios.put(`${VITE_BASE_URL}/Client/update-client`, payload);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating client:', error);
-        throw error;
-    }
-},
+        try {
+            const payload = {
+                id: clientId,
+                ...clientData
+            };
+            const response = await axios.put(`${VITE_BASE_URL}/Client/update-client`, payload);
+            return response.data;
+        } catch (error) {
+            console.error('Error updating client:', error);
+            throw error;
+        }
+    },
 
     deleteClient: async(clientId)=>{
         try {
