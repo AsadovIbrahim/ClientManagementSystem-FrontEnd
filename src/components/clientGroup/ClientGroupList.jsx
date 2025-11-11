@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import clientGroupService from "../../api/clientGroupService";
 import "./ClientGroupList.css";
 import ClientGroupForm from "./ClientGroupForm";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPen,faSearch } from '@fortawesome/free-solid-svg-icons'; 
 
 const ClientGroupList = () => {
     const [loading, setLoading] = useState(false);
@@ -83,11 +85,11 @@ const ClientGroupList = () => {
                     placeholder="Qrup adı ilə axtar..."
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
-                    onKeyPress={handleKeyPress} // ✅ buraya əlavə et
+                    onKeyPress={handleKeyPress} 
                 />
 
                 <button className="btn" onClick={fetchClientGroups}>
-                    🔍 Axtar
+                    <FontAwesomeIcon icon={faSearch}/> Axtar
                 </button>
             </div>
 
@@ -117,14 +119,14 @@ const ClientGroupList = () => {
                                                 className="btn-edit"
                                                 onClick={() => handleEdit(group)}
                                             >
-                                                ✏️
+                                                <FontAwesomeIcon icon={faPen} />
                                             </button>
 
                                             <button
                                                 className="btn-delete"
                                                 onClick={() => handleDeleteGroup(group.id)}
                                             >
-                                                🗑️
+                                                <FontAwesomeIcon icon={faTrash} />
                                             </button>
                                         </td>
                                     </tr>

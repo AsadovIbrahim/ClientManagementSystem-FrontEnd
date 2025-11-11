@@ -5,16 +5,27 @@ const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 const clientService={
 
     getAllClients: async (name = '') => {
-    try {
-        const response = await axios.get(`${VITE_BASE_URL}/Client/getallclients`, {
-            params: { name }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching clients:', error);
-        throw error;
-    }
-},
+        try {
+            const response = await axios.get(`${VITE_BASE_URL}/Client/getallclients`, {
+                params: { name }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching clients:', error);
+            throw error;
+        }
+    },
+    getAllClientsByGroupName: async (groupName) => {
+        try {
+            const response = await axios.get(`${VITE_BASE_URL}/Client/getclientsbygroupname`, {
+                params: { groupName }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching clients by group name:', error);
+            throw error;
+        }   
+    },
 
     createClient: async(clientData)=>{
         try {

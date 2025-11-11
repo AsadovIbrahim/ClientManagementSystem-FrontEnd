@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import clientService from '../../api/clientService';
 import ClientForm from './ClientForm';
 import './ClientList.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPen ,faSearch } from '@fortawesome/free-solid-svg-icons'; 
+import clientGroupService from '../../api/clientGroupService';
 
 const ClientList = () => {
     const [clients, setClients] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState('');
+    const [clientGroups, setClientGroups] = useState([]);
     const [searchName, setSearchName] = useState('');
     const [loading, setLoading] = useState(false);
     const [selectedClients, setSelectedClients] = useState([]);
@@ -13,6 +18,7 @@ const ClientList = () => {
 
     useEffect(() => {
         loadClients();
+        loadClientGroups();
     }, []);
 
     const loadClients = async () => {
@@ -30,6 +36,43 @@ const ClientList = () => {
             setLoading(false);
         }
     };
+    const loadClientGroups = async () => {
+        try {
+            const response = await clientGroupService.getAllClientGroups();
+            if (response.success) {
+                setClientGroups(response.data);
+            } else {
+                console.error('Error loading client groups:', response.message);
+            }
+        }
+        catch (error) {
+            console.error('Error loading client groups:', error);
+        }
+    };
+
+    const handleGroupChange = async (e) => {
+        const groupName = e.target.value;
+        setSelectedGroup(groupName);
+
+        setLoading(true);
+        try {
+            if (!groupName) {
+                await loadClients();
+            } else {
+                const response = await clientService.getAllClientsByGroupName(groupName);
+                if (response.success) {
+                    setClients(response.data);
+                } else {
+                    console.error('Error fetching clients by group:', response.message);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching clients by group:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleSearch = async (e) => {
         if (e) e.preventDefault();
@@ -162,7 +205,7 @@ const ClientList = () => {
                         className="search-input"
                     />
                     <button onClick={handleSearch} className="search-btn">
-                        🔍 Axtar
+                        <FontAwesomeIcon icon={faSearch}/> Axtar
                     </button>
                 </div>
                 
@@ -173,7 +216,7 @@ const ClientList = () => {
                             onClick={handleDeleteMultiple}
                             className="btn btn-danger"
                         >
-                            🗑️ Seçilmişləri Sil
+                            <FontAwesomeIcon icon={faTrash}/> Seçilmişləri Sil
                         </button>
                     </div>
                 )}
@@ -194,7 +237,19 @@ const ClientList = () => {
                                         onChange={toggleSelectAll}
                                     />
                                 </th>
-                                <th>Müştəri qrupu</th>
+                                <th>
+                                    <select 
+                                        value={selectedGroup} 
+                                        onChange={handleGroupChange}
+                                    >
+                                        <option value="">Bütün qruplar</option>
+                                        {clientGroups.map(group => (
+                                            <option key={group.id} value={group.name}>
+                                                {group.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </th>
                                 <th>Kod</th>
                                 <th>Ad</th>
                                 <th>Qeyd</th>
@@ -231,18 +286,16 @@ const ClientList = () => {
                                             title="Redaktə et"
                                             onClick={() => handleEditClient(client)}
                                         >
-                                            ✏️
+                                            <FontAwesomeIcon icon={faPen} />
                                         </button>
                                         <button 
                                             className="btn-delete" 
                                             title="Sil"
                                             onClick={() => handleDeleteClient(client.id)}
                                         >
-                                            🗑️
+                                            <FontAwesomeIcon icon={faTrash} />
                                         </button>
-                                        <button className="btn-view" title="Detallı bax">
-                                            👁️
-                                        </button>
+                                        
                                     </td>
                                 </tr>
                             ))}
