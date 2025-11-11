@@ -14,6 +14,17 @@ const clientGroupService={
             throw error;
         }
     },
+    getAllClientGroupsByCharacter: async(character)=>{
+        try {
+            const response = await axios.get(`${VITE_BASE_URL}/ClientGroup/getallclientgroupsbycharacter`, {
+                params: { character }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching client group by character:', error);
+            throw error;
+        }
+    },
     createClientGroup: async(clientGroupData)=>{
         try {
             const response = await axios.post(`${VITE_BASE_URL}/ClientGroup/create-clientgroup`, clientGroupData);

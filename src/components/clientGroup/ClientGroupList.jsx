@@ -3,9 +3,11 @@ import clientGroupService from "../../api/clientGroupService";
 import "./ClientGroupList.css";
 import ClientGroupForm from "./ClientGroupForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPen,faSearch } from '@fortawesome/free-solid-svg-icons'; 
+import { faTrash, faPen, faSearch } from '@fortawesome/free-solid-svg-icons'; 
+import { useTranslation } from 'react-i18next';
 
 const ClientGroupList = () => {
+    const { t, i18n } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
     const [groups, setGroups] = useState([]);
@@ -19,7 +21,7 @@ const ClientGroupList = () => {
     const fetchClientGroups = async () => {
         setLoading(true);
         try {
-            const response = await clientGroupService.getAllClientGroups(searchText);
+            const response = await clientGroupService.getAllClientGroupsByCharacter(searchText);
             setGroups(response.data);
         } catch (error) {
             console.error("Failed to fetch client groups:", error);
@@ -29,12 +31,12 @@ const ClientGroupList = () => {
     };
 
     const handleDeleteGroup = async (id) => {
-        if (window.confirm("Bu qrup silinsin?")) {
+        if (window.confirm(t('confirm_delete_client'))) {
             try {
                 await clientGroupService.deleteClientGroup(id);
                 fetchClientGroups();
             } catch (error) {
-                alert("Silinmə zamanı xəta baş verdi");
+                alert(t('client_delete_error'));
             }
         }
     };
@@ -44,15 +46,20 @@ const ClientGroupList = () => {
         setShowForm(true);
     };
 
+    const changeLanguage = (e) => {
+        i18n.changeLanguage(e.target.value);
+    };
+
     const handleEdit = (group) => {
         setEditingGroup(group);
         setShowForm(true);
     };
+
     const handleSearch = async (e) => {
         if (e) e.preventDefault();
         setLoading(true);
         try {
-            const response = await clientGroupService.getAllClientGroups(searchText);
+            const response = await clientGroupService.getAllClientGroupsByCharacter(searchText);
             if (response.success) {
                 setGroups(response.data);
             } else {
@@ -64,49 +71,56 @@ const ClientGroupList = () => {
             setLoading(false);
         }
     };
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleSearch();
         }
     };
+
     return (
         <div className="client-group-page">
             <div className="header">
-                <h2>Müştəri Qrupları</h2>
+                <h2>{t('client_group')}</h2>
 
-                <button className="btn btn-primary" onClick={handleCreate}>
-                    + Yeni Qrup
-                </button>
+                <div className="lang-div">
+                    <select className="lang-select" onChange={changeLanguage} value={i18n.language}>
+                        <option value="az">AZ</option>
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                    </select>
+                    <button className="btn btn-primary" onClick={handleCreate}>
+                        + {t('create')}
+                    </button>
+                </div>
             </div>
 
             <div className="search-box">
                 <input
                     type="text"
-                    placeholder="Qrup adı ilə axtar..."
+                    placeholder={t('search_client_name')}
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                     onKeyPress={handleKeyPress} 
                 />
-
                 <button className="btn" onClick={fetchClientGroups}>
-                    <FontAwesomeIcon icon={faSearch}/> Axtar
+                    <FontAwesomeIcon icon={faSearch}/> {t('search')}
                 </button>
             </div>
 
             <div className="table-container">
                 {loading ? (
-                    <div>Yüklənir...</div>
+                    <div>{t('loading')}</div>
                 ) : (
                     <table className="groups-table">
                         <thead>
                             <tr>
-                                <th>Kod</th>
-                                <th>Ad</th>
-                                <th>Qeyd</th>
-                                <th>Əməliyyatlar</th>
+                                <th>{t('code')}</th>
+                                <th>{t('name')}</th>
+                                <th>{t('note')}</th>
+                                <th>{t('actions')}</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             {groups.length > 0 ? (
                                 groups.map((group) => (
@@ -115,18 +129,12 @@ const ClientGroupList = () => {
                                         <td>{group.name}</td>
                                         <td>{group.comment ?? "-"}</td>
                                         <td>
-                                            <button
-                                                className="btn-edit"
-                                                onClick={() => handleEdit(group)}
-                                            >
-                                                <FontAwesomeIcon icon={faPen} />
+                                            <button className="btn-edit" onClick={() => handleEdit(group)}>
+                                                <FontAwesomeIcon icon={faPen} /> {t('edit')}
                                             </button>
 
-                                            <button
-                                                className="btn-delete"
-                                                onClick={() => handleDeleteGroup(group.id)}
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} />
+                                            <button className="btn-delete" onClick={() => handleDeleteGroup(group.id)}>
+                                                <FontAwesomeIcon icon={faTrash} /> {t('delete')}
                                             </button>
                                         </td>
                                     </tr>
@@ -134,7 +142,7 @@ const ClientGroupList = () => {
                             ) : (
                                 <tr>
                                     <td colSpan={4} style={{ textAlign: "center" }}>
-                                        Heç bir qrup tapılmadı
+                                        {t('no_clients')}
                                     </td>
                                 </tr>
                             )}

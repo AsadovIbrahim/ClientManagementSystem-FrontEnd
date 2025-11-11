@@ -69,7 +69,17 @@ const clientService={
             console.error('Error deleting multiple clients:', error);
             throw error;
         }
+    },
+    getClientByCharacter: async(character)=>{
+        try {
+            const response = await axios.get(`${VITE_BASE_URL}/Client/getclientsbycharactername`, {
+                params: { character }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching client by character:', error);
+            throw error;
+        }
     }
-
 }
 export default clientService;

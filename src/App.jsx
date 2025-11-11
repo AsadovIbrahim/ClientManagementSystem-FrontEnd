@@ -1,9 +1,11 @@
+import "./locales/index.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import ClientList from "./components/client/ClientList"
 import ClientGroupList from "./components/clientGroup/ClientGroupList"
 import ClientGroupTreeView from "./components/clientsgrouptree/ClientGroupTreeView"
 
-function App() {
+
+const App=() => {
   return (
     <BrowserRouter>
       <Routes>

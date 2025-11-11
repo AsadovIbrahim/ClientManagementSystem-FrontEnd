@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import clientGroupService from "../../api/clientGroupService";
 import "./ClientGroupForm.css";
+import { useTranslation } from 'react-i18next';
 
 const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
+    const { t } = useTranslation();
     const [name, setName] = useState("");
     const [code, setCode] = useState("");
     const [comment, setComment] = useState("");
@@ -52,7 +54,7 @@ const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
             onSuccess?.();
         } catch (error) {
             console.error("Error saving group:", error);
-            alert("Xəta baş verdi");
+            alert(t('client_save_error'));
         }
     };
 
@@ -60,13 +62,13 @@ const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
         <div className="modal-overlay">
             <div className="modal-container">
                 <div className="modal-header">
-                    <h3>{selectedGroup ? "Qrup Redaktə et" : "Yeni Qrup"}</h3>
+                    <h3>{selectedGroup ? t('edit_client') : t('create')}</h3>
                     <button onClick={onCancel} className="close-btn">✖</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal-form">
                     <label>
-                        Qrup adı *
+                        {t('client_group')} *
                         <input
                             type="text"
                             value={name}
@@ -76,7 +78,7 @@ const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
                     </label>
 
                     <label>
-                        Qrup kodu
+                        {t('client_code')}
                         <input
                             type="number"
                             value={code}
@@ -85,12 +87,12 @@ const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
                     </label>
 
                     <label>
-                        Valideyn Qrup
+                        {t('parent_group', { defaultValue: "Valideyn Qrup" })}
                         <select
                             value={parentGroupId}
                             onChange={(e) => setParentGroupId(e.target.value)}
                         >
-                            <option value="">-- Valideyn qrup seçin --</option>
+                            <option value="">{t('select_option')}</option>
                             {clientGroups.map(group => (
                                 <option key={group.id} value={group.id}>
                                     {group.name}
@@ -100,7 +102,7 @@ const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
                     </label>
 
                     <label>
-                        Qeyd
+                        {t('comment')}
                         <textarea
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
@@ -109,10 +111,10 @@ const ClientGroupForm = ({ selectedGroup, onSuccess, onCancel }) => {
 
                     <div className="modal-actions">
                         <button type="submit" className="btn-primary">
-                            {selectedGroup ? "Yenilə" : "Yarat"}
+                            {selectedGroup ? t('client_updated') : t('create')}
                         </button>
                         <button type="button" className="btn" onClick={onCancel}>
-                            İmtina
+                            {t('cancel')}
                         </button>
                     </div>
                 </form>

@@ -3,10 +3,12 @@ import clientService from '../../api/clientService';
 import ClientForm from './ClientForm';
 import './ClientList.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPen ,faSearch } from '@fortawesome/free-solid-svg-icons'; 
+import { faTrash, faPen, faSearch } from '@fortawesome/free-solid-svg-icons';
 import clientGroupService from '../../api/clientGroupService';
+import { useTranslation } from 'react-i18next';
 
 const ClientList = () => {
+    const { t, i18n } = useTranslation();
     const [clients, setClients] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState('');
     const [clientGroups, setClientGroups] = useState([]);
@@ -27,27 +29,22 @@ const ClientList = () => {
             const response = await clientService.getAllClients();
             if (response.success) {
                 setClients(response.data);
-            } else {
-                console.error('Error loading clients:', response.message);
             }
-        } catch (error) {
-            console.error('Error loading clients:', error);
-        } finally {
-            setLoading(false);
-        }
+        } catch {}
+        setLoading(false);
     };
+
     const loadClientGroups = async () => {
         try {
             const response = await clientGroupService.getAllClientGroups();
             if (response.success) {
                 setClientGroups(response.data);
-            } else {
-                console.error('Error loading client groups:', response.message);
             }
-        }
-        catch (error) {
-            console.error('Error loading client groups:', error);
-        }
+        } catch {}
+    };
+
+    const changeLanguage = (e) => {
+        i18n.changeLanguage(e.target.value);
     };
 
     const handleGroupChange = async (e) => {
@@ -62,45 +59,31 @@ const ClientList = () => {
                 const response = await clientService.getAllClientsByGroupName(groupName);
                 if (response.success) {
                     setClients(response.data);
-                } else {
-                    console.error('Error fetching clients by group:', response.message);
                 }
             }
-        } catch (error) {
-            console.error('Error fetching clients by group:', error);
-        } finally {
-            setLoading(false);
-        }
+        } catch {}
+        setLoading(false);
     };
 
-
-    const handleSearch = async (e) => {
-        if (e) e.preventDefault();
+    // ✅ FIX — search now triggers only when button pressed
+    const handleSearch = async () => {
         setLoading(true);
         try {
-            const response = await clientService.getAllClients(searchName);
-            if (response.success) {
-                setClients(response.data);
+            if (!searchName) {
+                await loadClients();
             } else {
-                console.error('Error loading clients:', response.message);
+                const response = await clientService.getClientByCharacter(searchName);
+                if (response.success) {
+                    setClients(response.data);
+                }
             }
-        } catch (error) {
-            console.error('Error loading clients:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
+        } catch {}
+        setLoading(false);
     };
 
     const toggleClientSelection = (clientId) => {
-        setSelectedClients(prev => 
-            prev.includes(clientId) 
+        setSelectedClients(prev =>
+            prev.includes(clientId)
                 ? prev.filter(id => id !== clientId)
                 : [...prev, clientId]
         );
@@ -116,27 +99,25 @@ const ClientList = () => {
 
     const handleDeleteMultiple = async () => {
         if (selectedClients.length === 0) return;
-        
-        if (window.confirm(`${selectedClients.length} müştəri silinsin?`)) {
+
+        if (window.confirm(t("confirm_delete_multiple", { count: selectedClients.length }))) {
             try {
                 await clientService.deleteMultipleClients(selectedClients);
-                loadClients();
+                handleSearch(); 
                 setSelectedClients([]);
-            } catch (error) {
-                console.error('Error deleting clients:', error);
-                alert('Müştərilər silinərkən xəta baş verdi: ' + error.message);
+            } catch {
+                alert(t("clients_delete_error"));
             }
         }
     };
 
     const handleDeleteClient = async (clientId) => {
-        if (window.confirm('Bu müştərini silmək istədiyinizə əminsiniz?')) {
+        if (window.confirm(t("confirm_delete_client"))) {
             try {
                 await clientService.deleteClient(clientId);
-                loadClients();
-            } catch (error) {
-                console.error('Error deleting client:', error);
-                alert('Müştəri silinərkən xəta baş verdi: ' + error.message);
+                handleSearch(); 
+            } catch {
+                alert(t("client_delete_error"));
             }
         }
     };
@@ -159,73 +140,74 @@ const ClientList = () => {
     const handleFormSubmit = async (clientData) => {
         try {
             let response;
-            
+
             if (editingClient) {
                 response = await clientService.updateClient(editingClient.id, clientData);
             } else {
                 response = await clientService.createClient(clientData);
             }
-            
+
             if (response.success) {
-                loadClients();
+                handleSearch();  
                 handleFormClose();
-                alert(editingClient ? 'Müştəri uğurla yeniləndi!' : 'Müştəri uğurla yaradıldı!');
+                alert(editingClient ? t("client_updated") : t("client_created"));
             } else {
-                alert(response.message || 'Xəta baş verdi');
+                alert(t("client_save_error"));
             }
-        } catch (error) {
-            console.error('Error saving client:', error);
-            alert('Müştəri yadda saxlanarkən xəta baş verdi: ' + error.message);
+        } catch {
+            alert(t("client_save_error"));
         }
     };
 
     return (
         <div className="client-list-container">
             <div className="client-header">
-                <h2>Material Təchizatçıları</h2>
+                <h2>{t("material_suppliers")}</h2>
+
                 <div className="header-actions">
-                    <button 
-                        className="btn btn-primary"
-                        onClick={handleCreateClient}
-                    >
-                        + Yeni Müştəri
+                    <select className='language-div' onChange={changeLanguage} value={i18n.language}>
+                        <option value="az">AZ</option>
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                    </select>
+
+                    <button className="btn btn-primary" onClick={handleCreateClient}>
+                        +{t("new_client")}
                     </button>
                 </div>
             </div>
 
-            {/* Search Section */}
+            {/* Search */}
             <div className="search-section">
                 <div className="search-box">
                     <input
                         type="text"
-                        placeholder="Müştəri adı ilə axtar..."
+                        placeholder={t("search_client_name")}
                         value={searchName}
                         onChange={(e) => setSearchName(e.target.value)}
-                        onKeyPress={handleKeyPress}
+                        onKeyDown={(e) => e.key === "Enter" && handleSearch()}  
                         className="search-input"
                     />
+
                     <button onClick={handleSearch} className="search-btn">
-                        <FontAwesomeIcon icon={faSearch}/> Axtar
+                        <FontAwesomeIcon icon={faSearch} /> {t("search")}
                     </button>
                 </div>
-                
+
                 {selectedClients.length > 0 && (
                     <div className="bulk-actions">
-                        <span>{selectedClients.length} müştəri seçildi</span>
-                        <button 
-                            onClick={handleDeleteMultiple}
-                            className="btn btn-danger"
-                        >
-                            <FontAwesomeIcon icon={faTrash}/> Seçilmişləri Sil
+                        <span>{t("selected_clients", { count: selectedClients.length })}</span>
+                        <button onClick={handleDeleteMultiple} className="btn btn-danger">
+                            <FontAwesomeIcon icon={faTrash} /> {t("delete_selected")}
                         </button>
                     </div>
                 )}
             </div>
 
-            {/* Table Section */}
+            {/* Table */}
             <div className="table-container">
                 {loading ? (
-                    <div className="loading">Yüklənir...</div>
+                    <div className="loading">{t("loading")}</div>
                 ) : (
                     <table className="clients-table">
                         <thead>
@@ -237,12 +219,10 @@ const ClientList = () => {
                                         onChange={toggleSelectAll}
                                     />
                                 </th>
+                                <th>{t("code")}</th>
                                 <th>
-                                    <select 
-                                        value={selectedGroup} 
-                                        onChange={handleGroupChange}
-                                    >
-                                        <option value="">Bütün qruplar</option>
+                                    <select className="client-group-select" value={selectedGroup} onChange={handleGroupChange}>
+                                        <option value="">{t("all_groups")}</option>
                                         {clientGroups.map(group => (
                                             <option key={group.id} value={group.name}>
                                                 {group.name}
@@ -250,12 +230,12 @@ const ClientList = () => {
                                         ))}
                                     </select>
                                 </th>
-                                <th>Kod</th>
-                                <th>Ad</th>
-                                <th>Qeyd</th>
-                                <th>Əməliyyatlar</th>
+                                <th>{t("name")}</th>
+                                <th>{t("note")}</th>
+                                <th>{t("actions")}</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {clients.map(client => (
                                 <tr key={client.id} className={selectedClients.includes(client.id) ? 'selected' : ''}>
@@ -266,36 +246,19 @@ const ClientList = () => {
                                             onChange={() => toggleClientSelection(client.id)}
                                         />
                                     </td>
+                                    <td>{client.code}</td>
                                     <td>
-                                        <span className="group-badge">
-                                            {client.groupName}
-                                        </span>
+                                        <span className="group-badge">{client.groupName}</span>
                                     </td>
-                                    <td className="code-cell">{client.code}</td>
-                                    <td className="name-cell">
-                                        <div className="client-name">
-                                            <strong>{client.name}</strong>
-                                        </div>
-                                    </td>
-                                    <td className="comment-cell">
-                                        {client.comment || '-'}
-                                    </td>
-                                    <td className="actions-cell">
-                                        <button 
-                                            className="btn-edit" 
-                                            title="Redaktə et"
-                                            onClick={() => handleEditClient(client)}
-                                        >
+                                    <td><strong>{client.name}</strong></td>
+                                    <td>{client.comment || '-'}</td>
+                                    <td>
+                                        <button className="btn-edit" onClick={() => handleEditClient(client)}>
                                             <FontAwesomeIcon icon={faPen} />
                                         </button>
-                                        <button 
-                                            className="btn-delete" 
-                                            title="Sil"
-                                            onClick={() => handleDeleteClient(client.id)}
-                                        >
+                                        <button className="btn-delete" onClick={() => handleDeleteClient(client.id)}>
                                             <FontAwesomeIcon icon={faTrash} />
                                         </button>
-                                        
                                     </td>
                                 </tr>
                             ))}
@@ -304,13 +267,10 @@ const ClientList = () => {
                 )}
 
                 {clients.length === 0 && !loading && (
-                    <div className="no-data">
-                        Heç bir müştəri tapılmadı
-                    </div>
+                    <div className="no-data">{t("no_clients")}</div>
                 )}
             </div>
 
-            {/* Client Form Modal */}
             {showForm && (
                 <ClientForm
                     client={editingClient}

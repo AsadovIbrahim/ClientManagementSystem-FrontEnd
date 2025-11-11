@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import clientService from '../../api/clientService';
 import clientGroupService from '../../api/clientGroupService';
 import './ClientForm.css';
+import { useTranslation } from 'react-i18next';
 
 const ClientForm = ({ client, onSubmit, onClose }) => {
+    const { t } = useTranslation();
+
     const [formData, setFormData] = useState({
         name: '',
         code: '',
         comment: '',
         clientGroupId: ''
     });
+
     const [clientGroups, setClientGroups] = useState([]);
 
     useEffect(() => {
@@ -54,13 +57,14 @@ const ClientForm = ({ client, onSubmit, onClose }) => {
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
-                    <h3>{client ? 'Müştərini Redaktə Et' : 'Yeni Müştəri'}</h3>
+                    <h3>{client ? t("edit_client") : t("new_client")}</h3>
                     <button className="close-btn" onClick={onClose}>×</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="client-form">
+                    
                     <div className="form-group">
-                        <label>Müştəri Adı *</label>
+                        <label>{t("client_name")} *</label>
                         <input
                             type="text"
                             name="name"
@@ -71,7 +75,7 @@ const ClientForm = ({ client, onSubmit, onClose }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>Kod *</label>
+                        <label>{t("client_code")} *</label>
                         <input
                             type="number"
                             name="code"
@@ -82,14 +86,14 @@ const ClientForm = ({ client, onSubmit, onClose }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>Müştəri Qrupu *</label>
+                        <label>{t("client_group")} *</label>
                         <select
                             name="clientGroupId"
                             value={formData.clientGroupId}
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Seçin --</option>
+                            <option value="">{t("select_option")}</option>
                             {clientGroups.map(group => (
                                 <option key={group.id} value={group.id}>
                                     {group.name}
@@ -99,7 +103,7 @@ const ClientForm = ({ client, onSubmit, onClose }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>Qeyd</label>
+                        <label>{t("comment")}</label>
                         <textarea
                             name="comment"
                             value={formData.comment}
@@ -108,8 +112,12 @@ const ClientForm = ({ client, onSubmit, onClose }) => {
                     </div>
 
                     <div className="form-actions">
-                        <button type="button" onClick={onClose}>Ləğv et</button>
-                        <button type="submit">{client ? 'Yadda Saxla' : 'Yarat'}</button>
+                        <button type="button" onClick={onClose}>
+                            {t("cancel")}
+                        </button>
+                        <button type="submit">
+                            {client ? t("save") : t("create")}
+                        </button>
                     </div>
                 </form>
             </div>

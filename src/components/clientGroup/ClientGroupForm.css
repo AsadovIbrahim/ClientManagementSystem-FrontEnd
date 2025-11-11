@@ -1,4 +1,4 @@
-/* Background overlay */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -12,7 +12,7 @@
     z-index: 999;
 }
 
-/* Modal container */
+
 .modal-container {
     background: white;
     width: 420px;
@@ -22,7 +22,7 @@
     animation: fadeIn 0.2s ease-in-out;
 }
 
-/* Header */
+
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -46,7 +46,7 @@
     transform: scale(1.1);
 }
 
-/* Form styles */
+
 .modal-form {
     margin-top: 15px;
     display: flex;
@@ -74,7 +74,7 @@
     resize: vertical;
 }
 
-/* Buttons */
+
 .modal-actions {
     display: flex;
     justify-content: flex-end;
