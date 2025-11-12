@@ -27,12 +27,14 @@ const ClientGroupTreeView = () => {
     };
 
     if (loading) {
-        return <div>{t('loading')}</div>;
+        return <div className="tree-loading">{t('loading')}</div>;
     }
 
     return (
         <div className="client-group-tree-view">
-            <h2>{t('organization_structure', { defaultValue: "Təşkilatın Strukturu" })}</h2>
+            <h2 className="tree-title">
+                {t('organization_structure', { defaultValue: "Təşkilatın Strukturu" })}
+            </h2>
             {treeData.length > 0 ? (
                 <ul className="tree">
                     {treeData.map(node => (
@@ -40,7 +42,7 @@ const ClientGroupTreeView = () => {
                     ))}
                 </ul>
             ) : (
-                <div>{t('no_clients')}</div>
+                <div className="no-data">{t('no_clients')}</div>
             )}
         </div>
     );

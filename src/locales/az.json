@@ -31,6 +31,10 @@
     "create": "Yarat",
     "select_option": "-- Seçin --",
     "parent_group": "Valideyn Qrup",
-    "organization_structure": "Təşkilatın Strukturu"
+    "organization_structure": "Təşkilatın Strukturu",
+    "client_system": "Müştəri Sistemi",
+    "clients": "Müştərilər",
+    "client_groups": "Müştəri Qrupları",
+    "group_structure": "Qrup Struktur"
 }
   

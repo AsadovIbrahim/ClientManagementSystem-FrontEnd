@@ -31,6 +31,12 @@
     "create": "Create",
     "select_option": "-- Select --",
     "parent_group": "Parent Group",
-    "organization_structure": "Organization Structure"
-  }
+    "organization_structure": "Organization Structure",
+    "client_system": "Client System",
+    "clients": "Clients",
+    "client_groups": "Client Groups",
+    "group_structure": "Group Structure"
+    
+    
+}
   

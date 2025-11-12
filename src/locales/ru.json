@@ -31,6 +31,10 @@
     "create": "Создать",
     "select_option": "-- Выберите --",
     "parent_group": "Родительская группа",
-    "organization_structure": "Структура организации"
+    "organization_structure": "Структура организации",
+    "client_system": "Система клиентов",
+    "clients": "Клиенты",
+    "client_groups": "Группы клиентов",
+    "group_structure": "Структура группы"
   }
   

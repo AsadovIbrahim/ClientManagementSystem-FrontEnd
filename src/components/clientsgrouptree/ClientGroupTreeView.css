@@ -1,10 +1,30 @@
 .client-group-tree-view {
-  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px 30px;
+  max-width: 700px;
+  margin: 30px auto;
+  transition: 0.3s;
+}
+
+.client-group-tree-view:hover {
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+.tree-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #f1f2f6;
+  padding-bottom: 10px;
 }
 
 .tree {
   list-style-type: none;
-  padding-left: 0;
+  padding-left: 10px;
+  margin: 0;
 }
 
 .tree-node {
@@ -12,23 +32,62 @@
 }
 
 .node-content {
-  cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 5px 0;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s, transform 0.15s;
+}
+
+.node-content:hover {
+  background-color: #f1f2f6;
+  transform: translateX(2px);
+}
+
+.node-content.expanded {
+  background-color: #f5f6fa;
 }
 
 .toggle-icon {
-  margin-right: 5px;
-  font-weight: bold;
+  width: 18px;
+  text-align: center;
+  margin-right: 6px;
+  color: #636e72;
+}
+
+.folder-icon {
+  margin-right: 8px;
+  color: #f9ca24;
+}
+
+.folder-icon.file {
+  color: #718093;
 }
 
 .node-label {
-  font-size: 16px;
+  font-size: 15px;
+  color: #2f3640;
+  font-weight: 500;
 }
 
 .tree-children {
   list-style-type: none;
-  padding-left: 20px;
-  border-left: 1px solid #ddd;
+  padding-left: 22px;
+  border-left: 2px dashed #dcdde1;
+  margin-top: 4px;
+}
+
+.tree-loading {
+  text-align: center;
+  color: #555;
+  padding: 30px;
+  font-size: 16px;
+}
+
+.no-data {
+  text-align: center;
+  color: #888;
+  font-size: 15px;
+  margin-top: 20px;
 }

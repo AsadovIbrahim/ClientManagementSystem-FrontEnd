@@ -1,0 +1,108 @@
+.app-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f6fa;
+    font-family: "Segoe UI", sans-serif;
+    position: relative;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 230px;
+    background-color: #2f3640;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    overflow: hidden;
+  }
+  
+  .sidebar.closed {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+  }
+  
+  .sidebar-title {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: #fbc531;
+    transition: opacity 0.3s ease;
+  }
+  
+  .sidebar.closed .sidebar-title,
+  .sidebar.closed .nav-menu {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Navigation */
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: #dcdde1;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+    white-space: nowrap;
+  }
+  
+  .nav-link:hover {
+    background-color: #414b57;
+    color: #fff;
+  }
+  
+  .nav-link.active {
+    background-color: #fbc531;
+    color: #2f3640;
+    font-weight: 600;
+  }
+  
+  /* Toggle button */
+  .toggle-btn {
+    position: absolute;
+    top: 20px;
+    left: 240px;
+    background-color: #2f3640;
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  
+  .toggle-btn:hover {
+    background-color: #414b57;
+  }
+  
+  .sidebar.closed ~ .toggle-btn {
+    left: 15px;
+  }
+  
+  /* Main content */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    transition: all 0.4s ease;
+  }
+  
+  .main-content.expanded {
+    margin-left: 50px;
+  }
+  
